@@ -6,6 +6,7 @@ class StateRequirementAdmin(admin.ModelAdmin):
 	(None,		{'fields': ['state']}),
 	('State Requirements', {'fields': ['totalTime', 'totalNight', 'totalInclement']}),
     ]
+    list_display = ('state','totalTime','totalNight','totalInclement')
 
 
 class SessionAdmin(admin.ModelAdmin):
