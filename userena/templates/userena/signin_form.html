@@ -8,7 +8,7 @@
 {% block content %}
 	
 	<div id="login-form" class="span-24 last">
-	    <form action="." method="post">{% csrf_token %}
+        <form action="." method="post">{% csrf_token %}
 			<h2>Login</h2>
 			
 			{% for field in form %}
@@ -25,8 +25,10 @@
 				</tr>
 				
 				<tr>
-					<td></td>
 					<td><input type="submit" value="Login" /></td>
+					{% if next %}
+                    <input type="hidden" name="next" value="{{next}}"/>
+                    {% endif %}
 				</tr>
 			</table>
 		</form>
