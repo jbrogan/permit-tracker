@@ -23,5 +23,5 @@ class SessionAdmin(admin.ModelAdmin):
 admin.site.register(Trainer)
 admin.site.register(StateRequirement, StateRequirementAdmin)
 admin.site.register(Student)
-admin.site.register(Session, SessionAdmin)
+admin.site.register(Session)
 admin.site.register(State)
