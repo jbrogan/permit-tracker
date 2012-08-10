@@ -1,0 +1,15 @@
+<html>
+<body>
+<p> Below is {{ user.username }}'s trainer(s) </p>
+<table border=1>
+    <tr>
+        <th> Student Name </th>
+    </tr>
+    {% for i in student %}
+    <tr>
+        <td> {{i.studentName}} </td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

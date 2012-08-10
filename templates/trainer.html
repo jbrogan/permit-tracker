@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+<html>
+    <body>
+{% block content %}
+<p> Below is {{ user.username }}'s trainer(s) </p>
+<table border=1>
+    <tr>
+        <th> Trainer Name </th>
+    </tr>
+    {% for i in trainer %}
+    <tr>
+        <td> {{i.trainerName}} </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+</body>
+</html>
