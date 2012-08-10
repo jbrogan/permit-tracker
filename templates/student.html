@@ -1,5 +1,7 @@
+{% extends 'base.html' %}
 <html>
-<body>
+    <body>
+{% block content %}
 <p> Below is {{ user.username }}'s trainer(s) </p>
 <table border=1>
     <tr>
@@ -11,5 +13,6 @@
     </tr>
     {% endfor %}
 </table>
+{% endblock %}
 </body>
 </html>
