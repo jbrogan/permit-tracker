@@ -1,26 +1,29 @@
 {% extends 'base.html' %}
-<html>
-    <body>
-{% block content %}
-<p> Below is {{ user.username }}'s session(s) </p>
-<table border=1>
-    <tr>
-        <th> Student Name </th>
-        <th> Trainer Name </th>
-        <th> Condition </th>
-        <th> Date</th>
-        <th>Total Time(Minutes) </th>
-    </tr>
-    {% for i in session %}
-    <tr>
-        <td> {{i.studentName}} </td>
-        <td> {{i.trainerName}} </td>
-        <td> {{i.conditions}} </td>
-        <td> {{i.date}} </td>
-        <td> {{i.driveTime}} </td>
-    </tr>
-    {% endfor %}
-</table>
-{% endblock %}
-</body>
-</html>
+
+    {% block js.extra %}
+        <script type='text/javascript'>
+          google.load('visualization', '1', {packages:['table']});
+          google.setOnLoadCallback(drawTable);
+          function drawTable() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Student Name');
+            data.addColumn('string', 'Trainer Name');
+            data.addColumn('string', 'Drive Time(Minutes)');
+            data.addColumn('string', 'Date');
+            data.addColumn('string', 'Conditions');
+            data.addRows([
+              {% for i in session %}
+              ['{{i.studentName}}', '{{i.trainerName}}','{{i.driveTime}}' , '{{i.date}}', '{{i.conditions}}'],
+              {% endfor %}
+            ]);
+
+            var table = new google.visualization.Table(document.getElementById('table-container'));
+            table.draw(data, {showRowNumber: false});
+          }
+        </script>
+    {% endblock js.extra%}
+
+    {% block content %}
+        <div id="table-container"> </div>
+    {% endblock %}
+
