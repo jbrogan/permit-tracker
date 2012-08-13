@@ -10,10 +10,11 @@
             data.addColumn('string', 'Trainer Name');
             data.addColumn('string', 'Drive Time(Minutes)');
             data.addColumn('string', 'Date');
-            data.addColumn('string', 'Conditions');
+            data.addColumn('string', 'Day/Night');
+            data.addColumn('boolean', 'Bad Weather');
             data.addRows([
               {% for i in session %}
-              ['{{i.studentName}}', '{{i.trainerName}}','{{i.driveTime}}' , '{{i.date}}', '{{i.conditions}}'],
+              ['{{i.studentName}}', '{{i.trainerName}}','{{i.driveTime}}' , '{{i.date}}', '{{i.conditions}}', {{i.badWeather|lower}}],
               {% endfor %}
             ]);
 
