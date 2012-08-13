@@ -40,6 +40,7 @@ class Session(models.Model):
     driveTime = models.IntegerField()
     distance = models.DecimalField(max_digits=10, decimal_places=2)
     conditions = models.CharField(choices=CHOICES, max_length=10)
+    badWeather = models.BooleanField()
 
     def __unicode__(self):
 	return str(self.date)
