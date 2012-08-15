@@ -1,129 +1,86 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
-	<head>
-		<title>{% block title %}Webservice Template{% endblock %}</title>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bootstrap, from Twitter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-		<!-- META TAGS -->
-		{% block meta %}
-        <meta http-equiv="content-type" content="{% block meta.content-type %}text/html;charset=UTF-8{% endblock meta.content-type %}" />
-        <meta name="description" content="{% block meta.description %}{% endblock meta.description %}" />
-        <meta name="keywords" content="{% block meta.keywords %}{% endblock meta.keywords %}" />
-        {% block meta.extra %}{% endblock meta.extra %}
-        {% endblock meta %}
-		
-        {% block css %}
-		<!-- CSS (BluePrint) -->		
-		<link rel="stylesheet" href="{{ MEDIA_URL }}css/blueprint/screen.css" type="text/css" media="screen, projection">
-		<link rel="stylesheet" href="{{ MEDIA_URL }}css/blueprint/print.css" type="text/css" media="print">
-		<!--[if lt IE 8]><link rel="stylesheet" href="{{ MEDIA_URL }}css/blueprint/ie.css" type="text/css" media="screen, projection"><![endif]-->
-		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/base.css" />
-        <!-- LOAD PAGE-SPECIFIC CSS -->
-        {% block css.extra %}{% endblock css.extra %}
-        {% endblock css %}        
-		
+    <!-- Le styles -->
+    <link href="{{ MEDIA_URL }}css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <link href="{{ MEDIA_URL }}css/bootstrap-responsive.css" rel="stylesheet">
 
-		{% block js %}
-		<!-- JS (jQuery) -->
-		<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery/jquery-1.4.4.min.js"></script>
-		<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/table.js"></script>
-		{% block js.extra %}{% endblock js.extra %}
-		{% endblock js %}
-		
-		{% block head.extra %}
-		{% endblock head.extra %}
-		
-	</head>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-    {% block body %}
-    <body>
-	    {% block header %}
-        {% block header.nav %}	    
-		<!-- NAVIGATION LINKS -->
-		<div id="navi">
-			<div class="container">
-				<div id="navi-left" class="span-18">
-					<a href="/" id="logo"><img /> WebsiteLogo</a>
-					<a href="/">Home</a>
-                    {% if user.is_authenticated %}
-                    <a href="/trainers/{{ user.id }}">Trainers</a>
-                    <a href="/students/{{ user.id }}">Students</a>
-                    <a href="/sessions/{{ user.id }}">Sessions</a>
-                    {% endif %}
-				</div>
-				<div id="navi-right" class="span-6 last">
-					{% if user.is_authenticated %}
-                    <a href="/accounts/{{ user.username }}">{{ user.username }}</a>
-                    <a href="/accounts/signout">Logout</a>
-                    {% else %}
-                    <a href="/accounts/signin">Login</a>
-					<a href="/accounts/signup">Sign Up</a>
-                    {% endif %}
-				</div>
-			</div>
-		</div>
-        {% endblock header.nav %}
-        {% endblock header %}	
-		
-	    {% block canvas %}
-		<!-- CONTENTS -->
-		<div id="contents" class="container">
-                <div class="span-24 last" style="min-height: 400px;">
-                    {% block content %}<p>ERROR: No contents found for specified URL.</p>{% endblock content %}
-                </div>
-		</div>
-		{% endblock canvas %}
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+  </head>
 
-        {% block footer %}		
-		<!-- FOOTER -->
-		<div id="footer">
-			<div class="container">
-				<div class="span-4">
-					<h6>Support</h6>
-					<ul>
-						<li><a href="#">Frequently Asked Questions</a></li>
-						<li><a href="#">Customer Service</a></li>
-						<li><a href="#">Community Forums</a></li>
-					</ul>
-				</div>
-				
-				<div class="span-4">
-					<h6>Company</h6>
-					<ul>
-						<li><a href="#">Blog</a></li>
-						<li><a href="#">About Us</a></li>
-						<li><a href="#">Office Hours</a></li>
-						<li><a href="#">Newsroom</a></li>
-						<li><a href="#">Careers</a></li>
-					</ul>
-				</div>
-				
-				<div class="span-4">
-					<h6>Legal</h6>
-					<ul>
-						<li><a href="#">Terms &amp; Conditions</a></li>
-						<li><a href="#">Privacy Policy</a></li>
-						<li><a href="#">Security</a></li>
-					</ul>
-				</div>
-				
-				<div id="social-links" class="span-4 prepend-8 last">
-					<a href="#"><img src="{{ MEDIA_URL }}images/social_facebook.png" /></a>
-					<a href="#"><img src="{{ MEDIA_URL }}images/social_flickr.png" /></a>
-					<a href="#"><img src="{{ MEDIA_URL }}images/social_technorati.png" /></a>
-					<a href="#"><img src="{{ MEDIA_URL }}images/social_twitter_bird.png" /></a>
-				</div>	
-			</div>
-		</div>
-		{% endblock footer %}
-        <div id="slingshot">
-            <div class="container">
-                {% comment %}
-                You can change or remove the following link, subject to a few conditions.  Please read the license document that came with this package for more information.
-                {% endcomment %}
-                <a href="http://www.djangoslingshot.com">Design by DjangoSlingshot.com</a> 
-            </div>
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Drive Logger</a>
+             <div class="btn-group pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> {{ user.username}} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/accounts/{{user.username}}">Profile</a></li>
+              <li class="divider"></li>
+              <li><a href="/accounts/signout">Sign Out</a></li>
+            </ul>
+          </div>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="/sessions/{{user.id}}">Session</a></li>
+              <li><a href="/trainers/{{user.id}}">Trainers</a></li>
+              <li><a href="/students/{{user.id}}">Students</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
         </div>
-	</body>
-	{% endblock body %}		
+      </div>
+    </div>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="{{ MEDIA_URL }}js/jquery.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-transition.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-alert.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-modal.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-dropdown.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-scrollspy.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-tab.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-tooltip.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-popover.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-button.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-collapse.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-carousel.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootstrap-typeahead.js"></script>
+
+  </body>
 </html>

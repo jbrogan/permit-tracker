@@ -2,40 +2,74 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from permitTracker.models import Trainer, Student, Session
+from forms import SessionForm, TrainerForm, StudentForm
 from account.models import MyProfile
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-
+from django import forms
 @login_required()
 def trainer(request, userId):
-    currentId = request.user.id
-    #if currentId == None:
-     #   return HttpResponseRedirect('/accounts/signin')
-    if int(currentId) == int(userId):
-        accountId = MyProfile.objects.get(user_id=currentId)
-        trainer = Trainer.objects.filter(account_id=accountId.id)
-        return render_to_response('trainer.html', {'trainer': trainer}, context_instance=RequestContext(request))
+    if request.method == 'GET':
+        form = TrainerForm()
+        if int(request.user.id) == int(userId):
+            accountId = MyProfile.objects.get(user_id=request.user.id)
+            trainer = Trainer.objects.filter(account_id=accountId.id)
+            return render_to_response('trainer.html', {'trainer': trainer, 'form': form}, context_instance=RequestContext(request))
+        else:
+            return HttpResponseRedirect('/trainers/'+str(request.user.id))
+    elif request.method == "POST":
+        accountId = MyProfile.objects.get(user_id=request.user.id)
+        form = TrainerForm(request.POST)
+        if form.is_valid():
+            s = Trainer(account_id=accountId.id)
+            f = TrainerForm(request.POST, instance=s)
+            f.save()
+            return HttpResponseRedirect('/trainers/'+str(request.user.id))
+        else:
+            return HttpResponseRedirect('/trainers/'+str(request.user.id))
 
-    else:
-        return HttpResponseRedirect('/trainers/'+str(currentId))
 
 @login_required()
 def student(request, userId):
-    currentId = request.user.id
-    if int(currentId) == int(userId):
-        accountId = MyProfile.objects.get(user_id=currentId)
-        student = Student.objects.filter(account_id=accountId.id)
-        return render_to_response('student.html', {'student': student}, context_instance=RequestContext(request))
-    else:
-        return HttpResponseRedirect('/students/'+str(currentId))
+    if request.method == 'GET':
+        form = StudentForm()
+        if int(request.user.id) == int(userId):
+            accountId = MyProfile.objects.get(user_id=request.user.id)
+            student = Student.objects.filter(account_id=accountId.id)
+            return render_to_response('student.html', {'student': student, 'form': form}, context_instance=RequestContext(request))
+        else:
+            return HttpResponseRedirect('/students/'+str(request.user.id))
+    elif request.method == "POST":
+        accountId = MyProfile.objects.get(user_id=request.user.id)
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            s = Student(account_id=accountId.id)
+            f = StudentForm(request.POST, instance=s)
+            f.save()
+            return HttpResponseRedirect('/students/'+str(request.user.id))
+        else:
+            return HttpResponseRedirect('/students/'+str(request.user.id))
 
 @login_required()
 def session(request, userId):
-    currentId = request.user.id
-    if int(currentId) == int(userId):
-        accountId = MyProfile.objects.get(user_id=currentId)
-        session = Session.objects.filter(account_id=accountId.id)
-        return render_to_response('session.html', {'session': session}, context_instance=RequestContext(request))
-    else:
-        return HttpResponseRedirect('/sessions/'+str(currentId))
+    if request.method == 'GET':
+        form = SessionForm()
+        if int(request.user.id) == int(userId):
+            accountId = MyProfile.objects.get(user_id=request.user.id)
+            session = Session.objects.filter(account_id=accountId.id)
+            return render_to_response('session.html', {'session': session, 'form': form}, context_instance=RequestContext(request))
+        else:
+            return HttpResponseRedirect('/sessions/'+str(request.user.id))
+    elif request.method == "POST":
+        accountId = MyProfile.objects.get(user_id=request.user.id)
+        form = SessionForm(request.POST)
+        if form.is_valid():
+            s = Session(account_id=accountId.id)
+            f = SessionForm(request.POST, instance=s)
+            f.save()
+            return HttpResponseRedirect('/sessions/'+str(request.user.id))
+        else:
+            return HttpResponseRedirect('/sessions/'+str(request.user.id))
+
+
