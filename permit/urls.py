@@ -6,23 +6,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
     # url(r'^$', 'permit.views.home', name='home'),
-    # url(r'^permit/', include('permit.foo.urls')),
-
-    (r'^trainers/(\d+)/$', trainer),
-    (r'^students/(\d+)/$', student),
-    (r'^sessions/(\d+)/$', session),
-    (r'^trainers/(\d+)/remove$', removeTrainer),
-    (r'^sessions/(\d+)/remove$', removeSession),
-    (r'^students/(\d+)/remove$', removeStudent),
-    (r'^sessions/(\d+)/edit$', editSession),
-    # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^permit/', include('permitTracker.urls')),
     url(r'^accounts/', include('userena.urls')),
+    url(r'^admin/', include(admin.site.urls)),
 )
 
 urlpatterns += patterns('',

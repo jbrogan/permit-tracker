@@ -18,7 +18,7 @@ def trainer(request, userId):
             trainer = Trainer.objects.filter(account_id=accountId.id)
             return render_to_response('trainer.html', {'trainer': trainer, 'form': form}, context_instance=RequestContext(request))
         else:
-            return HttpResponseRedirect('/trainers/'+str(request.user.id))
+            return HttpResponseRedirect('/permit/trainers/'+str(request.user.id))
     elif request.method == "POST":
         accountId = MyProfile.objects.get(user_id=request.user.id)
         form = TrainerForm(request.POST)
@@ -26,9 +26,9 @@ def trainer(request, userId):
             s = Trainer(account_id=accountId.id)
             f = TrainerForm(request.POST, instance=s)
             f.save()
-            return HttpResponseRedirect('/trainers/'+str(request.user.id))
+            return HttpResponseRedirect('/permit/trainers/'+str(request.user.id))
         else:
-            return HttpResponseRedirect('/trainers/'+str(request.user.id))
+            return HttpResponseRedirect('/permit/trainers/'+str(request.user.id))
 
 
 @login_required()
@@ -40,7 +40,7 @@ def student(request, userId):
             student = Student.objects.filter(account_id=accountId.id)
             return render_to_response('student.html', {'student': student, 'form': form}, context_instance=RequestContext(request))
         else:
-            return HttpResponseRedirect('/students/'+str(request.user.id))
+            return HttpResponseRedirect('/permit/students/'+str(request.user.id))
     elif request.method == "POST":
         accountId = MyProfile.objects.get(user_id=request.user.id)
         form = StudentForm(request.POST)
@@ -48,9 +48,9 @@ def student(request, userId):
             s = Student(account_id=accountId.id)
             f = StudentForm(request.POST, instance=s)
             f.save()
-            return HttpResponseRedirect('/students/'+str(request.user.id))
+            return HttpResponseRedirect('/permit/students/'+str(request.user.id))
         else:
-            return HttpResponseRedirect('/students/'+str(request.user.id))
+            return HttpResponseRedirect('/permit/students/'+str(request.user.id))
 
 @login_required()
 def session(request, userId):
@@ -61,7 +61,7 @@ def session(request, userId):
             session = Session.objects.filter(account_id=accountId.id)
             return render_to_response('session.html', {'session': session, 'form': form}, context_instance=RequestContext(request))
         else:
-            return HttpResponseRedirect('/sessions/'+str(request.user.id))
+            return HttpResponseRedirect('/permit/sessions/'+str(request.user.id))
     elif request.method == "POST":
         accountId = MyProfile.objects.get(user_id=request.user.id)
         form = SessionForm(request.POST)
@@ -69,28 +69,28 @@ def session(request, userId):
             s = Session(account_id=accountId.id)
             f = SessionForm(request.POST, instance=s)
             f.save()
-            return HttpResponseRedirect('/sessions/'+str(request.user.id))
+            return HttpResponseRedirect('/permit/sessions/'+str(request.user.id))
         else:
-            return HttpResponseRedirect('/sessions/'+str(request.user.id))
+            return HttpResponseRedirect('/permit/sessions/'+str(request.user.id))
 
 
 @login_required()
 def removeTrainer(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     trainer = Trainer.objects.get(account_id=accountId.id,id=userId).delete()
-    return HttpResponseRedirect('/trainers/'+str(request.user.id))
+    return HttpResponseRedirect('/permit/trainers/'+str(request.user.id))
 
 @login_required()
 def removeSession(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     session = Session.objects.get(account_id=accountId.id,id=userId).delete()
-    return HttpResponseRedirect('/sessions/'+str(request.user.id))
+    return HttpResponseRedirect('/permit/sessions/'+str(request.user.id))
 
 @login_required()
 def removeStudent(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     student = Student.objects.get(account_id=accountId.id,id=userId).delete()
-    return HttpResponseRedirect('/students/'+str(request.user.id))
+    return HttpResponseRedirect('/permit/students/'+str(request.user.id))
 
 @login_required()
 def editSession(request, userId):
