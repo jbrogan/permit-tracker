@@ -87,6 +87,12 @@ def removeSession(request, userId):
     return HttpResponseRedirect('/sessions/'+str(request.user.id))
 
 @login_required()
+def removeStudent(request, userId):
+    accountId = MyProfile.objects.get(user_id=request.user.id)
+    student = Student.objects.get(account_id=accountId.id,id=userId).delete()
+    return HttpResponseRedirect('/students/'+str(request.user.id))
+
+@login_required()
 def editSession(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     session = Session.objects.get(account_id=accountId.id,id=userId)

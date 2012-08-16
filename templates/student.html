@@ -26,7 +26,6 @@
                 <div class="span12" style="padding-bottom: 20px;">
                     <a class="btn btn-success" data-toggle="modal" href="#myModal">Add <i class="icon-plus icon-white"></i></a>
 
-                    <a class="btn btn-danger" href="/trainers/12">Delete <i class="icon-minus icon-white"></i></a>
             </div>
         </div>
             <div class="row">
@@ -36,6 +35,7 @@
                       <tr>
                           <th>Name</th>
                           <th>State</th>
+                          <th>Actions</th>
                       </tr>
                  </thead>
               <tbody>
@@ -43,6 +43,8 @@
               {% for i in student %}
                       <td>{{i.studentName}}</td>
                       <td>{{i.state}}</td>
+                      <td><a class="btn btn-danger" href="/students/{{i.id}}/remove"><i class="icon-remove icon-white"></i></a>
+                          <a class="btn btn-primary" href="/sessions/{{i.id}}/edit"><i class="icon-edit icon-white"></i></a></td>
                   </tr>
             {% endfor %}
             </table>
