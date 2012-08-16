@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from settings import MEDIA_ROOT
-from permitTracker.views import trainer, student, session
+from permitTracker.views import trainer, student, session, removeTrainer, removeSession, editSession
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
@@ -13,6 +13,9 @@ urlpatterns = patterns('',
     (r'^trainers/(\d+)/$', trainer),
     (r'^students/(\d+)/$', student),
     (r'^sessions/(\d+)/$', session),
+    (r'^trainers/(\d+)/remove$', removeTrainer),
+    (r'^sessions/(\d+)/remove$', removeSession),
+    (r'^sessions/(\d+)/edit$', editSession),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

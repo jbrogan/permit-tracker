@@ -26,7 +26,7 @@
                 <div class="span12" style="padding-bottom: 20px;">
                     <a class="btn btn-success" data-toggle="modal" href="#myModal">Add <i class="icon-plus icon-white"></i></a>
 
-                    <a class="btn btn-danger" href="/trainers/12">Delete <i class="icon-minus icon-white"></i></a>
+                    <a class="btn btn-danger" href="/sessions/12">Delete <i class="icon-minus icon-white"></i></a>
             </div>
         </div>
             <div class="row">
@@ -34,9 +34,14 @@
               <table class="table table-striped table-bordered">
                   <thead>
                       <tr>
-                          <th>Name</th>
-                          <th>Age</th>
-                          <th>Favorite Color</th>
+                          <th>Student Name</th>
+                          <th>Trainer Name</th>
+                          <th>Drive Time(Minutes)</th>
+                          <th>Date</th>
+                          <th>Day/Night</th>
+                          <th>Inclement Weather</th>
+                          <th>Miles</th>
+                          <th>Actions</th>
                       </tr>
                  </thead>
               <tbody>
@@ -49,6 +54,8 @@
                       <td>{{i.conditions}}</td>
                       <td>{{i.badWeather|lower}}</td>
                       <td>{{i.distance}}</td>
+                      <td><a class="btn btn-danger" href="/sessions/{{i.id}}/remove"><i class="icon-remove icon-white"></i></a>
+                          <a class="btn btn-primary" href="/sessions/{{i.id}}/edit"><i class="icon-edit icon-white"></i></a></td>
                   </tr>
             {% endfor %}
             </table>

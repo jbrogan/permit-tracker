@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django import forms
+
 @login_required()
 def trainer(request, userId):
     if request.method == 'GET':
@@ -73,3 +74,21 @@ def session(request, userId):
             return HttpResponseRedirect('/sessions/'+str(request.user.id))
 
 
+@login_required()
+def removeTrainer(request, userId):
+    accountId = MyProfile.objects.get(user_id=request.user.id)
+    trainer = Trainer.objects.get(account_id=accountId.id,id=userId).delete()
+    return HttpResponseRedirect('/trainers/'+str(request.user.id))
+
+@login_required()
+def removeSession(request, userId):
+    accountId = MyProfile.objects.get(user_id=request.user.id)
+    session = Session.objects.get(account_id=accountId.id,id=userId).delete()
+    return HttpResponseRedirect('/sessions/'+str(request.user.id))
+
+@login_required()
+def editSession(request, userId):
+    accountId = MyProfile.objects.get(user_id=request.user.id)
+    session = Session.objects.get(account_id=accountId.id,id=userId)
+    form = SessionForm(instance=session)
+    return HttpResponseRedirect('#myModal')

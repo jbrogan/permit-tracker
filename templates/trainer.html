@@ -26,7 +26,6 @@
                 <div class="span12" style="padding-bottom: 20px;">
                     <a class="btn btn-success" data-toggle="modal" href="#myModal">Add <i class="icon-plus icon-white"></i></a>
 
-                    <a class="btn btn-danger" href="/trainers/12">Delete <i class="icon-minus icon-white"></i></a>
             </div>
         </div>
             <div class="row">
@@ -40,8 +39,9 @@
               <tbody>
                   <tr>
               {% for i in trainer %}
-                      <td>{{i.trainerName}}</td>
-                  </tr>
+              <td>{{i.trainerName}}</td>
+              <td><a class="btn btn-danger" href="/trainers/{{i.id}}/remove"><i class="icon-remove icon-white"></i></a></td>
+              </tr>
             {% endfor %}
             </table>
 </div>
