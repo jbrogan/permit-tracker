@@ -50,7 +50,11 @@
                       <td>{{i.driveTime}}</td>
                       <td>{{i.date}}</td>
                       <td>{{i.conditions}}</td>
-                      <td>{{i.badWeather|lower}}</td>
+                      {% if i.badWeather %}
+                      <td><i class="icon-ok"></i></td>
+                      {% else %}
+                      <td></td>
+                      {% endif %}
                       <td>{{i.distance}}</td>
                       <td><a class="btn btn-danger" href="/permit/sessions/{{i.id}}/remove"><i class="icon-remove icon-white"></i></a>
                           <a class="btn btn-primary" href="/permit/sessions/{{i.id}}/edit"><i class="icon-edit icon-white"></i></a></td>
