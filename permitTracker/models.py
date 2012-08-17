@@ -2,14 +2,14 @@ from django.db import models
 from account.models import MyProfile
 
 class Trainer(models.Model):
-    trainerName = models.CharField(max_length=20)
+    trainerName = models.CharField("Trainer Name", max_length=20)
     account = models.ForeignKey(MyProfile)
 
     def __unicode__(self):
 	return str(self.trainerName)
 
 class State(models.Model):
-    state = models.CharField(max_length=2)
+    state = models.CharField("State", max_length=2)
 
     def __unicode__(self):
 	return str(self.state)
@@ -24,7 +24,7 @@ class StateRequirement(models.Model):
 	return str(self.state)
 
 class Student(models.Model):
-    studentName = models.CharField(max_length=20)
+    studentName = models.CharField("Student Name", max_length=20)
     state = models.ForeignKey(StateRequirement)
     account = models.ForeignKey(MyProfile)
 
@@ -36,11 +36,11 @@ class Session(models.Model):
     studentName = models.ForeignKey(Student)
     trainerName = models.ForeignKey(Trainer)
     account = models.ForeignKey(MyProfile)
-    date = models.DateField()
-    driveTime = models.IntegerField()
-    distance = models.DecimalField(max_digits=10, decimal_places=2)
-    conditions = models.CharField(choices=CHOICES, max_length=10)
-    badWeather = models.BooleanField()
+    date = models.DateField("Date")
+    driveTime = models.IntegerField("Drive Time")
+    distance = models.DecimalField("Distance", max_digits=10, decimal_places=2)
+    conditions = models.CharField("Conditions", choices=CHOICES, max_length=10)
+    badWeather = models.BooleanField("Inclement weather")
 
     def __unicode__(self):
 	return str(self.date)
