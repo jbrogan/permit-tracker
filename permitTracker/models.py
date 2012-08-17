@@ -33,8 +33,8 @@ class Student(models.Model):
 
 class Session(models.Model):
     CHOICES = (('Day','Day'), ('Night','Night'))
-    studentName = models.ForeignKey(Student)
-    trainerName = models.ForeignKey(Trainer)
+    studentName = models.ForeignKey(Student, verbose_name="student Name")
+    trainerName = models.ForeignKey(Trainer, verbose_name="trainer Name")
     account = models.ForeignKey(MyProfile)
     date = models.DateField("Date")
     driveTime = models.IntegerField("Drive Time")
