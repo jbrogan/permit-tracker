@@ -2,9 +2,9 @@ from django.conf.urls import patterns, include, url
 from views import trainer, student, session, removeTrainer, removeSession, removeStudent, editSession
 
 urlpatterns = patterns('',
-    (r'trainers/(\d+)/$', trainer),
-    (r'students/(\d+)/$', student),
-    (r'sessions/(\d+)/$', session),
+    url(r'trainers/(\d+)/$', trainer, name='trainer_view'),
+    url(r'students/(\d+)/$', student, name='student_view'),
+    url(r'sessions/(\d+)/$', session, name='session_view'),
     (r'trainers/(\d+)/remove$', removeTrainer),
     (r'sessions/(\d+)/remove$', removeSession),
     (r'students/(\d+)/remove$', removeStudent),
