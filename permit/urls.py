@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, include, url
 from settings import MEDIA_ROOT
-from permitTracker.views import trainer, student, session, removeTrainer, removeSession, removeStudent, editSession
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
