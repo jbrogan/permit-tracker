@@ -50,10 +50,28 @@
           </div>
           <div class="nav-collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="/permit/students/{{user.id}}">Students</a></li>
+              {% if 'home' in request.path %}
+                <li class="active"> <a href="#">Home</a></li>
+                <li><a href="/permit/students/{{user.id}}">Students</a></li>
               <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
               <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
+              {% elif 'students' in request.path %}
+                <li> <a href="#">Home</a></li>
+                <li class="active"><a href="/permit/students/{{user.id}}">Students</a></li>
+              <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
+              <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
+              {% elif 'trainers' in request.path %}
+                <li> <a href="#">Home</a></li>
+                <li><a href="/permit/students/{{user.id}}">Students</a></li>
+              <li class="active"><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
+              <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
+              {% elif 'sessions' in request.path %}
+                <li> <a href="#">Home</a></li>
+                <li><a href="/permit/students/{{user.id}}">Students</a></li>
+              <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
+              <li class="active"><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
+              {% endif %} 
+
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -62,6 +80,7 @@
 
     <div class="container">
         {% block content %}
+        <p>{{ request.path }}</p>
         {% endblock %}
     </div> <!-- /container -->
 
