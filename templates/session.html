@@ -64,5 +64,19 @@
 </div>
 </div>
 </div>
-    {% endblock %}
+{% endblock content %}
+{% block js.extra %}
+<script>
+        $(function(){
+            $('#id_date').datepicker({
+                format: 'yyyy-mm-dd'
+            });
+        });
+    </script>
+    <script>
+        $("td").appendTo("<span class="add-on"><i class="icon-th"></i></span>");
+        
+</script>
+{% endblock js.extra %}
+
 
