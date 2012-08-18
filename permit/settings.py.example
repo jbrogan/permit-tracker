@@ -1,6 +1,6 @@
 # Django settings for permit project.
 import os
-
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__)) + '/../'
@@ -85,11 +85,14 @@ STATICFILES_FINDERS = (
 SECRET_KEY = '897qjvneeb!&amp;hj-=mur30^je5uglea^!a6^$vd8%p-!$ys^-hw'
 
 # List of callables that know how to import templates from various sources.
+TEMPLATE_CONTEXT_PROCESSORS = TCP + ('django.core.context_processors.request',)
+
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
 )
+
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
