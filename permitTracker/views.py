@@ -7,6 +7,7 @@ from account.models import MyProfile
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 from django import forms
 
 @login_required()
@@ -78,23 +79,30 @@ def session(request, userId):
 def removeTrainer(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     trainer = Trainer.objects.get(account_id=accountId.id,id=userId).delete()
-    return HttpResponseRedirect('/permit/trainers/'+str(request.user.id))
+    return redirect('trainer_view', request.user.id)
 
 @login_required()
 def removeSession(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     session = Session.objects.get(account_id=accountId.id,id=userId).delete()
-    return HttpResponseRedirect('/permit/sessions/'+str(request.user.id))
+    return redirect('session_view', request.user.id)
 
 @login_required()
 def removeStudent(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     student = Student.objects.get(account_id=accountId.id,id=userId).delete()
-    return HttpResponseRedirect('/permit/students/'+str(request.user.id))
+    return redirect('student_view', request.user.id)
 
 @login_required()
 def editSession(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     session = Session.objects.get(account_id=accountId.id,id=userId)
     form = SessionForm(instance=session)
+    return HttpResponseRedirect('#myModal')
+
+@login_required()
+def editTrainer(request, userId):
+    accountId = MyProfile.objects.get(user_id=request.user.id)
+    trainer = Trainer.objects.get(account_id=accountId.id,id=userId)
+    form = TrainerForm(instance=trainer)
     return HttpResponseRedirect('#myModal')
