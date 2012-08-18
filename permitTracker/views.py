@@ -59,7 +59,7 @@ def session(request, userId):
         form = SessionForm()
         if int(request.user.id) == int(userId):
             accountId = MyProfile.objects.get(user_id=request.user.id)
-            session = Session.objects.filter(account_id=accountId.id)
+            session = Session.objects.filter(account_id=accountId.id).order_by('-date')
             return render_to_response('session.html', {'session': session, 'form': form}, context_instance=RequestContext(request))
         else:
             return HttpResponseRedirect('/permit/sessions/'+str(request.user.id))
