@@ -43,7 +43,7 @@
               {% for i in student %}
                       <td>{{i.studentName}}</td>
                       <td>{{i.state}}</td>
-                      <td><a class="btn btn-danger" href="/permit/students/{{i.id}}/remove"><i class="icon-remove icon-white"></i></a>
+		      <td><a class="btn btn-danger" href="{% url student_view i.id%}remove"><i class="icon-remove icon-white"></i></a>
                           <a class="btn btn-primary" href="/permit/sessions/{{i.id}}/edit"><i class="icon-edit icon-white"></i></a></td>
                   </tr>
             {% endfor %}
