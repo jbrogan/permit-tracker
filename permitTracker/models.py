@@ -11,6 +11,9 @@ class Trainer(models.Model):
 class State(models.Model):
     state = models.CharField("State", max_length=2)
 
+    class Meta:
+        ordering = ['state']
+
     def __unicode__(self):
 	return str(self.state)
 

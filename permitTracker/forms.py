@@ -1,6 +1,6 @@
 from django.forms import ModelForm, ModelChoiceField
 from permitTracker.views import Session, Trainer, Student
-from permitTracker.models import State
+from permitTracker.models import StateRequirement
 
 class SessionForm(ModelForm):
     class Meta:
@@ -15,7 +15,7 @@ class TrainerForm(ModelForm):
 
 
 class StudentForm(ModelForm):
-    state = ModelChoiceField(queryset = State.objects.order_by('state'))
+    state = ModelChoiceField(queryset = StateRequirement.objects.order_by('state'))
     class Meta:
         model = Student
         exclude = ('account',)
