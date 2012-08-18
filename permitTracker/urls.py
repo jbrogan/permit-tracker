@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from views import trainer, student, session, removeTrainer, removeSession, removeStudent, editSession
+from views import trainer, student, session, removeTrainer, removeSession, removeStudent, editSession, editTrainer
 
 urlpatterns = patterns('',
     url(r'trainers/(\d+)/$', trainer, name='trainer_view'),
@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     (r'sessions/(\d+)/remove$', removeSession),
     (r'students/(\d+)/remove$', removeStudent),
     (r'sessions/(\d+)/edit$', editSession),
+    url(r'trainers/(\d+)/edit$', editTrainer, name='trainer_edit'),
 )
