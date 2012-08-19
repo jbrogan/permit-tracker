@@ -6,7 +6,7 @@ class Trainer(models.Model):
     account = models.ForeignKey(MyProfile)
 
     def __unicode__(self):
-	return str(self.trainerName)
+        return str(self.trainerName)
 
 class State(models.Model):
     state = models.CharField("State", max_length=2)
@@ -15,7 +15,7 @@ class State(models.Model):
         ordering = ['state']
 
     def __unicode__(self):
-	return str(self.state)
+        return str(self.state)
 
 class StateRequirement(models.Model):
     state = models.ForeignKey(State)
@@ -24,15 +24,15 @@ class StateRequirement(models.Model):
     totalInclement = models.IntegerField()
 
     def __unicode__(self):
-	return str(self.state)
+        return str(self.state)
 
 class Student(models.Model):
+    state = models.ForeignKey(State)
     studentName = models.CharField("Student Name", max_length=20)
-    state = models.ForeignKey(StateRequirement)
     account = models.ForeignKey(MyProfile)
 
     def __unicode__(self):
-	return str(self.studentName)
+        return str(self.studentName)
 
 class Session(models.Model):
     CHOICES = (('Day','Day'), ('Night','Night'))
@@ -46,4 +46,4 @@ class Session(models.Model):
     badWeather = models.BooleanField("Inclement weather")
 
     def __unicode__(self):
-	return str(self.date)
+        return str(self.date)
