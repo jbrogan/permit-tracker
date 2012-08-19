@@ -104,3 +104,10 @@ def editTrainer(request, userId):
     trainer = Trainer.objects.get(account_id=accountId.id,id=userId)
     form = TrainerForm(instance=trainer)
     return HttpResponseRedirect('#myModal')
+
+@login_required()
+def editStudent(request, userId):
+    accountId = MyProfile.objects.get(user_id=request.user.id)
+    student = Student.objects.get(account_id=accountId.id,id=userId)
+    form = StudentForm(instance=student)
+    return HttpResponseRedirect('#myModal')
