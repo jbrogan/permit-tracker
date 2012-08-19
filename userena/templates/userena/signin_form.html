@@ -1,13 +1,8 @@
 {% extends 'base.html' %}
-
-{% block title %}{{block.super}} - Login{% endblock %}
-
-{% block css.extra %}{{block.super}}{% endblock css.extra %}
-{% block js.extra %}{{block.super}}{% endblock js.extra %}
-
 {% block content %}
-	
-	<div id="login-form" class="span-24 last">
+<div class="row">
+    <div class="span3">
+	<div id="login-form">
         <form action="." method="post">{% csrf_token %}
 			<h2>Login</h2>
 			
@@ -33,5 +28,6 @@
 			</table>
 		</form>
 	</div>
-	
+</div>
+</div>
 {% endblock %}
