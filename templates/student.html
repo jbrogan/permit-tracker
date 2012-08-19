@@ -44,7 +44,7 @@
                       <td>{{i.studentName}}</td>
                       <td>{{i.state}}</td>
 		      <td><a class="btn btn-danger" href="{% url student_view i.id%}remove"><i class="icon-remove icon-white"></i></a>
-                          <a class="btn btn-primary" href="/permit/sessions/{{i.id}}/edit"><i class="icon-edit icon-white"></i></a></td>
+                          <a class="btn btn-primary" href="{% url student_edit i.id%}"><i class="icon-edit icon-white"></i></a></td>
                   </tr>
             {% endfor %}
             </table>
