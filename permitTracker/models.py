@@ -36,12 +36,12 @@ class Student(models.Model):
 
 class Session(models.Model):
     CHOICES = (('Day','Day'), ('Night','Night'))
-    studentName = models.ForeignKey(Student, verbose_name="student Name")
-    trainerName = models.ForeignKey(Trainer, verbose_name="trainer Name")
+    studentName = models.ForeignKey(Student, verbose_name="Student")
+    trainerName = models.ForeignKey(Trainer, verbose_name="Trainer")
     account = models.ForeignKey(MyProfile)
     date = models.DateField("Date")
-    driveTime = models.IntegerField("Drive Time")
-    distance = models.DecimalField("Distance", max_digits=10, decimal_places=2)
+    driveTime = models.IntegerField("Driving Time")
+    distance = models.IntegerField("Distance", null=True, blank=True)
     conditions = models.CharField("Conditions", choices=CHOICES, max_length=10)
     badWeather = models.BooleanField("Inclement weather")
 
