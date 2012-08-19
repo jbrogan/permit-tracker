@@ -14,7 +14,7 @@
         {{ field.label_tag }}
         </th>
         {% if 'date' in field.label_tag  %}
-         <td> <div class="input-append">{{ field }}<span class="add-on"><i class="icon-th"></i></span></td></div>
+        <td>  <div class="input-append date" id="dp3" data-date="{% now 'Y-m-j' %}" data-date-format="yyyy-mm-dd">{{ field }}<span class="add-on"><i class="icon-th"></i></span></td></div>
         {% elif 'distance' in field.label_tag  %}
         <td> <div class="input-append">{{ field }}<span class="add-on">Miles(optional) </span></td></div>
         {% elif 'Time' in field.label_tag  %}
@@ -83,13 +83,12 @@
 {% block js.extra %}
 <script>
         $(function(){
-            $('#id_date').datepicker({
-                format: 'yyyy-mm-dd'
-            });
+            $('#dp3').datepicker();
         });
     </script>
     <script>
-        $("td").appendTo("<span class="add-on"><i class="icon-th"></i></span>");
+        $('#id_date').attr('value','{% now "Y-m-j" %}');
+        $('#id_date').attr('readonly','readonly');
         
 </script>
 {% endblock js.extra %}
