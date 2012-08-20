@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Drive Logger</title>
+    <title>Road Test Ready</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -40,7 +40,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Drive Logger</a>
+          <a class="brand" href="#">Road Test Ready</a>
              <div class="btn-group pull-right">
             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> {{ user.username}} <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -53,29 +53,29 @@
             <ul class="nav">
               {% if 'home' in request.path %}
                 <li class="active"> <a href="#">Home</a></li>
-                <li><a href="/permit/students/{{user.id}}">Students</a></li>
-              <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
-              <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
+                <li><a href="{% url student_view user.id %}">Students</a></li>
+              <li><a href="{% url trainer_view user.id %}">Trainers</a></li>
+              <li><a href="{% url session_view user.id %}">Sessions</a></li>
               {% elif 'students' in request.path %}
                 <li> <a href="#">Home</a></li>
-                <li class="active"><a href="/permit/students/{{user.id}}">Students</a></li>
-              <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
-              <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
+                <li class="active"><a href="{% url student_view user.id %}">Students</a></li>
+              <li><a href="{% url trainer_view user.id %}">Trainers</a></li>
+              <li><a href="{% url session_view user.id %}">Sessions</a></li>
               {% elif 'trainers' in request.path %}
                 <li> <a href="#">Home</a></li>
-                <li><a href="/permit/students/{{user.id}}">Students</a></li>
-              <li class="active"><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
-              <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
+                <li><a href="{% url student_view user.id %}">Students</a></li>
+              <li class="active"><a href="{% url trainer_view user.id %}">Trainers</a></li>
+              <li><a href="{% url session_view user.id %}">Sessions</a></li>
               {% elif 'sessions' in request.path %}
                 <li> <a href="#">Home</a></li>
-                <li><a href="/permit/students/{{user.id}}">Students</a></li>
-              <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
-              <li class="active"><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
+                <li><a href="{% url student_view user.id %}">Students</a></li>
+              <li><a href="{% url trainer_view user.id %}">Trainers</a></li>
+              <li class="active"><a href="{% url session_view user.id %}">Sessions</a></li>
               {% else %}
                 <li> <a href="#">Home</a></li>
-                <li><a href="/permit/students/{{user.id}}">Students</a></li>
-              <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
-              <li class="active"><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
+                <li><a href="{% url student_view user.id %}">Students</a></li>
+              <li><a href="{% url trainer_view user.id %}">Trainers</a></li>
+              <li class="active"><a href="{% url session_view user.id %}">Sessions</a></li>
 
               {% endif %} 
 
