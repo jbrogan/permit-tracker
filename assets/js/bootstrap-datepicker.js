@@ -102,8 +102,9 @@
 			} else {
 				this.element.prop('value', formated);
 			}
+            this.picker.hide();
 		},
-		
+	    	
 		place: function(){
 			var offset = this.component ? this.component.offset() : this.element.offset();
 			this.picker.css({
