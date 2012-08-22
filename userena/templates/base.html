@@ -40,7 +40,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Road Test Ready</a>
+          <a class="brand" href="/">Road Test Ready</a>
              <div class="btn-group pull-right">
             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> {{ user.username}} <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -52,31 +52,26 @@
           <div class="nav-collapse">
             <ul class="nav">
               {% if 'home' in request.path %}
-                <li class="active"> <a href="/">Home</a></li>
                 <li><a href="/permit/students/{{user.id}}">Students</a></li>
               <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
               <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
               <li><a href="/permit/summary/">Summary</a></li>
               {% elif 'students' in request.path %}
-                <li> <a href="/">Home</a></li>
                 <li class="active"><a href="/permit/students/{{user.id}}">Students</a></li>
               <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
               <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
               <li><a href="/permit/summary/">Summary</a></li>
               {% elif 'trainers' in request.path %}
-                <li> <a href="/">Home</a></li>
                 <li><a href="/permit/students/{{user.id}}">Students</a></li>
               <li class="active"><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
               <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
               <li><a href="/permit/summary/">Summary</a></li>
               {% elif 'sessions' in request.path %}
-                <li> <a href="/">Home</a></li>
                 <li><a href="/permit/students/{{user.id}}">Students</a></li>
               <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
               <li class="active"><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
               <li><a href="/permit/summary/">Summary</a></li>
               {% else %}
-                <li> <a href="/">Home</a></li>
                 <li><a href="/permit/students/{{user.id}}">Students</a></li>
               <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
               <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
