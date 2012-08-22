@@ -6,6 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # url(r'^$', 'permit.views.home', name='home'),
+    url(r'^$', 'permitTracker.views.home'),
     url(r'^permit/', include('permitTracker.urls')),
     url(r'^accounts/', include('userena.urls')),
     url(r'^admin/', include(admin.site.urls)),

@@ -10,6 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django import forms
 
+def home(request):
+    return render_to_response('home.html', context_instance=RequestContext(request))
+
 @login_required()
 def trainer(request, userId):
     if request.method == 'GET':
