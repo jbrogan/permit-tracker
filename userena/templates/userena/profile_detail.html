@@ -1,4 +1,4 @@
-{% extends 'userena/base_userena.html' %}
+{% extends 'base.html' %}
 {% load i18n %}
 {% load url from future %}
 
@@ -6,13 +6,12 @@
 {% block content_title %}<h2>{{ profile.user.username }} {% if profile.user.get_full_name %}({{ profile.user.get_full_name }}){% endif %}</h2>{% endblock %}
 
 {% block content %}
-  <div class="white-box">
     {% block profile_navigation %}
       {% comment %}Dirty hack. Will use django-guardian in the future.{% endcomment %}
       {% if user.username == profile.user.username %}
-        <ul id="box-nav">
+        <ul class="nav nav-pills">
           {% block profile_navigation_items %}
-            <li><a href="{% url 'userena_profile_detail' user.username %}">{% trans "View profile" %}</a></li>
+            <li class="active"><a href="{% url 'userena_profile_detail' user.username %}">{% trans "View profile" %}</a></li>
             <li><a href="{% url 'userena_profile_edit' user.username %}">{% trans "Edit details" %}</a></li>
             <li><a href="{% url 'userena_password_change' user.username %}">{% trans "Change password" %}</a></li>
             <li><a href="{% url 'userena_email_change' user.username %}">{% trans "Change email" %}</a></li>
