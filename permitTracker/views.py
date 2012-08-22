@@ -1,7 +1,7 @@
 # Create your views here.
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
-from permitTracker.models import Trainer, Student, Session
+from permitTracker.models import Trainer, Student, Session, StateRequirement
 from forms import SessionForm, TrainerForm, StudentForm
 from account.models import MyProfile
 from django.contrib.auth.models import User
@@ -9,9 +9,29 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django import forms
+from django.db.models import Sum
 
 def home(request):
     return render_to_response('home.html', context_instance=RequestContext(request))
+
+def summary(request):
+    accountId = MyProfile.objects.get(user_id=request.user.id)
+    student = Student.objects.filter(account_id=accountId.id)
+    return render_to_response('summary.html', {'student' : student}, context_instance=RequestContext(request))
+
+def getSummary(request, userId):
+    accountId = MyProfile.objects.get(user_id=request.user.id)
+    student = Student.objects.filter(account_id=accountId.id)
+    stateHours = Student.objects.get(account_id=accountId.id, id=userId)
+    totalHours = StateRequirement.objects.get(state_id=stateHours.state_id)
+    stateTime = int(totalHours.totalTime) * 60
+    time = Session.objects.filter(account_id=accountId.id, studentName_id=userId).aggregate(Sum('driveTime'))
+    percent = time['driveTime__sum'] / float(stateTime)
+    percent = int(round(percent,2) * 100)
+    print time['driveTime__sum']
+    return render_to_response('summaryGet.html', {'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
+
+
 
 @login_required()
 def trainer(request, userId):
