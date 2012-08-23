@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<ul class="nav nav-pills">
+    {% for i in student %}
+    <li class="active">
+    <a href="/permit/summary/{{ i.id }}/">{{ i.studentName }}</a>
+    </li>
+    {% endfor %}
+</ul>
+<div class="well">
+    <p> You have completed {{completedTime}} hours of {{totalTime}} hour requirement. </p>
+<div class="progress">
+    <div class="bar" style="width: {{ percent }}%"></div>
+</div>
+</div>
+
+{% endblock %}
+
