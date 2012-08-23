@@ -88,6 +88,8 @@ def session(request, userId):
         if int(request.user.id) == int(userId):
             accountId = MyProfile.objects.get(user_id=request.user.id)
             session = Session.objects.filter(account_id=accountId.id).order_by('-date')
+            form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
+            form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
             return render_to_response('session.html', {'session': session, 'form': form}, context_instance=RequestContext(request))
         else:
             return redirect('session_view', request.user.id)
