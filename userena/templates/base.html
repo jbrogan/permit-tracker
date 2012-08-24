@@ -53,34 +53,11 @@
           <div class="nav-collapse">
               <ul class="nav">
           {% if user.is_authenticated %}
-              {% if 'home' in request.path %}
                 <li><a href="/permit/students/{{user.id}}">Students</a></li>
               <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
               <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
               <li><a href="/permit/summary/">Summary</a></li>
-              {% elif 'students' in request.path %}
-                <li class="active"><a href="/permit/students/{{user.id}}">Students</a></li>
-              <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
-              <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
-              <li><a href="/permit/summary/">Summary</a></li>
-              {% elif 'trainers' in request.path %}
-                <li><a href="/permit/students/{{user.id}}">Students</a></li>
-              <li class="active"><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
-              <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
-              <li><a href="/permit/summary/">Summary</a></li>
-              {% elif 'sessions' in request.path %}
-                <li><a href="/permit/students/{{user.id}}">Students</a></li>
-              <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
-              <li class="active"><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
-              <li><a href="/permit/summary/">Summary</a></li>
-              {% else %}
-                <li><a href="/permit/students/{{user.id}}">Students</a></li>
-              <li><a href="/permit/trainers/{{user.id}}">Trainers</a></li>
-              <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
-              <li class="active"><a href="/permit/summary/">Summary</a></li>
-              {% endif %}
     {% else %}
-            <li class="active"> <a href="/">Home</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/contact">Contact</a></li>
          </div>
@@ -122,6 +99,14 @@
     <script src="{{ MEDIA_URL }}js/bootstrap-carousel.js"></script>
     <script src="{{ MEDIA_URL }}js/bootstrap-typeahead.js"></script>
     <script src="{{ MEDIA_URL }}js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+$('li').each(function(){
+    if(window.location.href.indexOf($(this).find('a:first').attr('href'))>-1)
+    {
+    $(this).addClass('active').siblings().removeClass('active');
+    }
+});
+</script>
     {% block js.extra %}{% endblock js.extra %}
     {% endblock js %}
   </body>
