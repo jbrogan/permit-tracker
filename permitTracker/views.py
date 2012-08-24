@@ -27,11 +27,9 @@ def getSummary(request, userId):
     stateTime = int(totalHours.totalTime) * 60
     time = Session.objects.filter(account_id=accountId.id, studentName_id=userId).aggregate(Sum('driveTime'))
     if time['driveTime__sum']  == None:
-        print 'FOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO'
         percent = 0
         time['driveTime__sum'] = 0
     else:
-        print 'Toooooooooooooooooooooooo'
         percent = time['driveTime__sum'] / float(stateTime)
         percent = int(round(percent,2) * 100)
 
