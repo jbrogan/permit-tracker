@@ -17,7 +17,23 @@ def home(request):
 def summary(request):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     student = Student.objects.filter(account_id=accountId.id)
-    return render_to_response('summary.html', {'student' : student}, context_instance=RequestContext(request))
+    try:
+        studentId = Student.objects.filter(account_id=accountId.id)[0:1].get()
+    except:
+        return render_to_response('summary.html', {'student' : student}, context_instance=RequestContext(request))
+    stateHours = Student.objects.get(account_id=accountId.id, id=studentId.id)
+    totalHours = StateRequirement.objects.get(state_id=stateHours.state_id)
+    stateTime = int(totalHours.totalTime) * 60
+    time = Session.objects.filter(account_id=accountId.id, studentName_id=studentId.id).aggregate(Sum('driveTime'))
+    if time['driveTime__sum']  == None:
+        percent = 0
+        time['driveTime__sum'] = 0
+    else:
+        percent = time['driveTime__sum'] / float(stateTime)
+        percent = int(round(percent,2) * 100)
+
+    return render_to_response('summary.html', {'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
+ 
 
 def getSummary(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)

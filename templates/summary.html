@@ -2,11 +2,33 @@
 {% block content %}
 <ul class="nav nav-pills">
     {% for i in student %}
-    <li class="active">
+    <li {% if forloop.first %}class="active" {% endif %}>
     <a href="/permit/summary/{{ i.id }}/">{{ i.studentName }}</a>
     </li>
     {% endfor %}
 </ul>
+{% if student %}
+{% if percent %}
+<div class="well">
+    <p> You have completed {{completedTime}} hours of {{totalTime}} hour requirement. </p>
+<div class="progress">
+    <div class="bar" style="width: {{ percent }}%"></div>
+</div>
+</div>
+{% else %}
+
+<div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+<p> Hey! you need to add a session to see the summary. Click <a href="/permit/sessions/12">here</a> to go to the session page to add a session.</p>            
+</div>
+{% endif %}
+{% else %}
+
+<div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+<p> Hey! you need to add a student to see the summary. Click <a href="/permit/students/12">here</a> to add a student </p>            
+</div>
+{% endif %}
 
 {% endblock %}
 
