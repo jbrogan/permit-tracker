@@ -26,9 +26,13 @@ def getSummary(request, userId):
     totalHours = StateRequirement.objects.get(state_id=stateHours.state_id)
     stateTime = int(totalHours.totalTime) * 60
     time = Session.objects.filter(account_id=accountId.id, studentName_id=userId).aggregate(Sum('driveTime'))
-    percent = time['driveTime__sum'] / float(stateTime)
-    percent = int(round(percent,2) * 100)
-    print time['driveTime__sum']
+    if time['driveTime__sum']  == None:
+        percent = 0
+        time['driveTime__sum'] = 0
+    else:
+        percent = time['driveTime__sum'] / float(stateTime)
+        percent = int(round(percent,2) * 100)
+
     return render_to_response('summaryGet.html', {'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
 
 
@@ -82,6 +86,8 @@ def session(request, userId):
         if int(request.user.id) == int(userId):
             accountId = MyProfile.objects.get(user_id=request.user.id)
             session = Session.objects.filter(account_id=accountId.id).order_by('-date')
+            form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
+            form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
             return render_to_response('session.html', {'session': session, 'form': form}, context_instance=RequestContext(request))
         else:
             return redirect('session_view', request.user.id)

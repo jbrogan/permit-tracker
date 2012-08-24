@@ -40,6 +40,7 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="/">Road Test Ready</a>
+          {% if user.is_authenticated %}
              <div class="btn-group pull-right">
             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-user"></i> {{ user.username}} <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -47,7 +48,8 @@
               <li class="divider"></li>
               <li><a href="/accounts/signout">Sign Out</a></li>
             </ul>
-          </div>
+        </div>
+        {% endif %}
           <div class="nav-collapse">
               <ul class="nav">
           {% if user.is_authenticated %}
@@ -85,7 +87,7 @@
          <div class="pull-right">
          <ul class="nav">
             <li><a href="/accounts/signin">Signin </a></li>
-            <li><a href="/accounts/signin">Signup </a></li>
+            <li><a href="/accounts/signup">Signup </a></li>
         <ul>
         </div>
     {% endif %}
