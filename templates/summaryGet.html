@@ -7,12 +7,20 @@
     </li>
     {% endfor %}
 </ul>
+{% if percent %}
 <div class="well">
     <p> You have completed {{completedTime}} hours of {{totalTime}} hour requirement. </p>
 <div class="progress">
     <div class="bar" style="width: {{ percent }}%"></div>
 </div>
 </div>
+{% else %}
+
+<div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+<p> Hey! you need to add a session to see the summary. Click <a href="/permit/sessions/12">here</a> to go to the session page to add a session.</p>            
+</div>
+{% endif %}
 
 {% endblock %}
 
