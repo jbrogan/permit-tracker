@@ -2,7 +2,7 @@
 {% block content %}
 <ul class="nav nav-pills">
     {% for i in student %}
-    <li class="active">
+    <li>
     <a href="/permit/summary/{{ i.id }}/">{{ i.studentName }}</a>
     </li>
     {% endfor %}
