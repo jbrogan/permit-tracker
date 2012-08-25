@@ -1,15 +1,15 @@
-# Create your views here.
+# Django modules here
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from permitTracker.models import Trainer, Student, Session, StateRequirement
-from forms import SessionForm, TrainerForm, StudentForm
-from account.models import MyProfile
+from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
-from django import forms
 from django.db.models import Sum
+from django import forms
+# Our app modules here
+from permitTracker.models import Trainer, Student, Session, StateRequirement
+from forms import SessionForm, TrainerForm, StudentForm
+from account.models import MyProfile
 
 def home(request):
     return render_to_response('home.html', context_instance=RequestContext(request))
@@ -54,25 +54,32 @@ def getSummary(request, userId):
 
 
 @login_required()
-def trainer(request, userId):
+def trainer(request, trainerId=None):
+
+    # If we are passed in a trainer, verify that is it a valid trainer
+    if trainerId is not None:
+        trainer = get_object_or_404(Trainer, id=trainerId)
+    else:
+        trainer = None
+
     if request.method == 'GET':
-        form = TrainerForm()
-        if int(request.user.id) == int(userId):
+        if trainer is not None:
+            form = TrainerForm(instance=trainer)
+            id = trainerId
+            return render_to_response('trainer_edit.html', locals(), context_instance=RequestContext(request))
+        else:
+            form = TrainerForm()
             accountId = MyProfile.objects.get(user_id=request.user.id)
             trainer = Trainer.objects.filter(account_id=accountId.id)
-            return render_to_response('trainer.html', {'trainer': trainer, 'form': form}, context_instance=RequestContext(request))
-        else:
-            return redirect('trainer_view', request.user.id)
+            return render_to_response('trainer.html', locals(), context_instance=RequestContext(request))
     elif request.method == "POST":
         accountId = MyProfile.objects.get(user_id=request.user.id)
-        form = TrainerForm(request.POST)
+        form = TrainerForm(request.POST, instance=trainer)
         if form.is_valid():
-            s = Trainer(account_id=accountId.id)
-            f = TrainerForm(request.POST, instance=s)
-            f.save()
-            return redirect('trainer_view', request.user.id)
+            form.save()
+            return redirect('trainer_view')
         else:
-            return redirect('trainer_view', request.user.id)
+            return redirect('trainer_view')
 
 @login_required()
 def student(request, userId):
@@ -119,10 +126,10 @@ def session(request, userId):
             return redirect('session_view', request.user.id)
 
 @login_required()
-def removeTrainer(request, userId):
+def deleteTrainer(request, trainerId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
-    trainer = Trainer.objects.get(account_id=accountId.id,id=userId).delete()
-    return redirect('trainer_view', request.user.id)
+    trainer = Trainer.objects.get(account_id=accountId.id,id=trainerId).delete()
+    return redirect('trainer_view')
 
 @login_required()
 def removeSession(request, userId):
