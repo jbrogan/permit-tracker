@@ -54,7 +54,7 @@ def getSummary(request, userId):
 
 
 @login_required()
-def trainer(request, trainerId=None):
+def trainer(request, accountId, trainerId=None):
 
     # If we are passed in a trainer, verify that is it a valid trainer
     if trainerId is not None:
@@ -63,23 +63,34 @@ def trainer(request, trainerId=None):
         trainer = None
 
     if request.method == 'GET':
+        # Here we handle GET's.  If a trainer id is in the uri then we are doing
+        # and edit and will display this trainer instance using the edit form, otherwise
+        # display the list of trainers for this account
         if trainer is not None:
             form = TrainerForm(instance=trainer)
             id = trainerId
+            account_id = accountId
             return render_to_response('trainer_edit.html', locals(), context_instance=RequestContext(request))
         else:
             form = TrainerForm()
-            accountId = MyProfile.objects.get(user_id=request.user.id)
-            trainer = Trainer.objects.filter(account_id=accountId.id)
+            account = MyProfile.objects.get(user_id=request.user.id)
+            trainer = Trainer.objects.filter(account_id=account.id)
             return render_to_response('trainer.html', locals(), context_instance=RequestContext(request))
-    elif request.method == "POST":
-        accountId = MyProfile.objects.get(user_id=request.user.id)
-        form = TrainerForm(request.POST, instance=trainer)
+    elif request.method == 'POST':
+
+        account = MyProfile.objects.get(user_id=request.user.id)
+
+        if trainer is not None:
+            form = TrainerForm(request.POST, instance=trainer)
+        else:
+            t = Trainer(account_id=account.id)
+            form = TrainerForm(request.POST, instance=t)
+
         if form.is_valid():
             form.save()
-            return redirect('trainer_view')
+            return redirect('trainer_view', account.id)
         else:
-            return redirect('trainer_view')
+            return redirect('trainer_view', account.id)
 
 @login_required()
 def student(request, userId):
@@ -126,10 +137,13 @@ def session(request, userId):
             return redirect('session_view', request.user.id)
 
 @login_required()
-def deleteTrainer(request, trainerId):
-    accountId = MyProfile.objects.get(user_id=request.user.id)
-    trainer = Trainer.objects.get(account_id=accountId.id,id=trainerId).delete()
-    return redirect('trainer_view')
+def deleteTrainer(request, accountId, trainerId):
+    account = MyProfile.objects.get(user_id=request.user.id)
+    # Need to add code here that validates the following:
+    # That user making the request is associated with the accountId being passed in and
+    # that this account owns the trainer being passed in
+    trainer = Trainer.objects.get(account_id=account.id,id=trainerId).delete()
+    return redirect('trainer_view', account.id)
 
 @login_required()
 def removeSession(request, userId):

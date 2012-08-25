@@ -42,8 +42,8 @@
           <tr>
             <td>{{i.trainerName}}</td>
             <td>
-              <a class="btn btn-danger" href="{% url trainer_delete i.id %}"><i class="icon-remove icon-white"></i></a>
-              <a class="btn btn-primary" href="{% url trainer_edit i.id %}"><i class="icon-edit icon-white"></i></a>
+              <a class="btn btn-danger" href="{% url trainer_delete i.account_id i.id %}"><i class="icon-remove icon-white"></i></a>
+              <a class="btn btn-primary" href="{% url trainer_edit i.account_id i.id %}"><i class="icon-edit icon-white"></i></a>
             </td>
           </tr>
         {% endfor %}

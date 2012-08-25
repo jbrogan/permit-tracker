@@ -7,10 +7,10 @@ from views import (
 )
 
 urlpatterns = patterns('',
-    url(r'trainers/$', trainer, name='trainer_view'),
-    url(r'trainers/(\d+)/$', trainer, name='trainer_view'),
-    url(r'trainers/(\d+)/edit$', trainer, name='trainer_edit'),
-    url(r'trainers/(\d+)/delete$', deleteTrainer, name='trainer_delete'),
+    url(r'(\d+)/trainers/$', trainer, name='trainer_view'),
+    url(r'(\d+)/trainers/(\d+)/$', trainer, name='trainer_view'),
+    url(r'(\d+)/trainers/(\d+)/edit$', trainer, name='trainer_edit'),
+    url(r'(\d+)/trainers/(\d+)/delete$', deleteTrainer, name='trainer_delete'),
     url(r'students/(\d+)/$', student, name='student_view'),
     (r'students/(\d+)/remove$', removeStudent),
     url(r'students/(\d+)/edit$', editStudent, name='student_edit'),

@@ -54,7 +54,7 @@
               <ul class="nav">
           {% if user.is_authenticated %}
                 <li><a href="/permit/students/{{user.id}}">Students</a></li>
-              <li><a href="/permit/trainers/">Trainers</a></li>
+              <li><a href="/permit/{{user.id}}/trainers/">Trainers</a></li>
               <li><a href="/permit/sessions/{{user.id}}">Sessions</a></li>
               <li><a href="/permit/summary/">Summary</a></li>
     {% else %}
