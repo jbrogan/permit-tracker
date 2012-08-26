@@ -6,6 +6,10 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django import forms
+
+# Other modules here
+import logging
+
 # Our app modules here
 from permitTracker.models import Trainer, Student, Session, StateRequirement
 from forms import SessionForm, TrainerForm, StudentForm
@@ -62,6 +66,12 @@ def trainer(request, accountId, trainerId=None):
     else:
         trainer = None
 
+    # Check here to validate that this user is tied to the accountId in the URI
+    # redirect to their view page if not
+    account = MyProfile.objects.get(user_id=request.user.id)
+    if int(accountId) != int(account.id):
+        return redirect('trainer_view', account.id)
+
     if request.method == 'GET':
         # Here we handle GET's.  If a trainer id is in the uri then we are doing
         # and edit and will display this trainer instance using the edit form, otherwise
@@ -73,18 +83,17 @@ def trainer(request, accountId, trainerId=None):
             return render_to_response('trainer_edit.html', locals(), context_instance=RequestContext(request))
         else:
             form = TrainerForm()
-            account = MyProfile.objects.get(user_id=request.user.id)
             trainer = Trainer.objects.filter(account_id=account.id)
             return render_to_response('trainer.html', locals(), context_instance=RequestContext(request))
     elif request.method == 'POST':
 
-        account = MyProfile.objects.get(user_id=request.user.id)
-
+        # Updating existing trainer
         if trainer is not None:
             form = TrainerForm(request.POST, instance=trainer)
         else:
-            t = Trainer(account_id=account.id)
-            form = TrainerForm(request.POST, instance=t)
+            # Adding new trainer
+            trainer = Trainer(account_id=account.id)
+            form = TrainerForm(request.POST, instance=trainer)
 
         if form.is_valid():
             form.save()
@@ -138,7 +147,13 @@ def session(request, userId):
 
 @login_required()
 def deleteTrainer(request, accountId, trainerId):
+
+    # Check here to validate that this user is tied to the accountId in the URI
+    # redirect to their view page if not
     account = MyProfile.objects.get(user_id=request.user.id)
+    if int(accountId) != int(account.id):
+        return redirect('trainer_view', account.id)
+
     # Need to add code here that validates the following:
     # That user making the request is associated with the accountId being passed in and
     # that this account owns the trainer being passed in
