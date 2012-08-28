@@ -20,8 +20,8 @@ def home(request):
 
 def summary(request):
     accountId = MyProfile.objects.get(user_id=request.user.id)
-    student = Student.objects.filter(account_id=accountId.id)
     try:
+        student = Student.objects.filter(account_id=accountId.id)
         studentId = Student.objects.filter(account_id=accountId.id)[0:1].get()
     except:
         return render_to_response('summary.html', {'student' : student}, context_instance=RequestContext(request))
@@ -123,17 +123,20 @@ def student(request, userId):
             return redirect('student_view', request.user.id)
 
 @login_required()
-def session(request, userId):
+def session(request):
     if request.method == 'GET':
         form = SessionForm()
-        if int(request.user.id) == int(userId):
-            accountId = MyProfile.objects.get(user_id=request.user.id)
-            session = Session.objects.filter(account_id=accountId.id).order_by('-date')
-            form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
-            form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
-            return render_to_response('session.html', {'session': session, 'form': form}, context_instance=RequestContext(request))
-        else:
-            return redirect('session_view', request.user.id)
+        accountId = MyProfile.objects.get(user_id=request.user.id)
+        try:
+            student = Student.objects.filter(account_id=accountId.id)
+            studentFoo = Student.objects.filter(account_id=accountId.id)[0:1].get()
+        except:
+            return render_to_response('sessionError.html',  context_instance=RequestContext(request))
+
+        session = Session.objects.filter(account_id=accountId.id,studentName=studentFoo.id).order_by('-date')
+        form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
+        form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
+        return render_to_response('session.html', {'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
     elif request.method == "POST":
         accountId = MyProfile.objects.get(user_id=request.user.id)
         form = SessionForm(request.POST)
@@ -141,9 +144,34 @@ def session(request, userId):
             s = Session(account_id=accountId.id)
             f = SessionForm(request.POST, instance=s)
             f.save()
-            return redirect('session_view', request.user.id)
+            return redirect('session_view')
         else:
-            return redirect('session_view', request.user.id)
+            return redirect('session_view')
+
+def getSession(request,userId):
+    if request.method == 'GET':
+        userId = int(userId)
+        form = SessionForm()
+        accountId = MyProfile.objects.get(user_id=request.user.id)
+        student = Student.objects.filter(account_id=accountId.id)
+        try:
+            studentFoo = Student.objects.get(account_id=accountId.id,id=userId)
+        except:
+            return render_to_response('sessionError.html', context_instance=RequestContext(request))
+        session = Session.objects.filter(account_id=accountId.id,studentName=studentFoo.id).order_by('-date')
+        form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
+        form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
+        return render_to_response('session.html', {'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
+    elif request.method == "POST":
+        accountId = MyProfile.objects.get(user_id=request.user.id)
+        form = SessionForm(request.POST)
+        if form.is_valid():
+            s = Session(account_id=accountId.id)
+            f = SessionForm(request.POST, instance=s)
+            f.save()
+            return redirect('session_view', userId)
+        else:
+            return redirect('session_view', userId)
 
 @login_required()
 def deleteTrainer(request, accountId, trainerId):
