@@ -56,7 +56,6 @@ def getSummary(request, userId):
     return render_to_response('summaryGet.html', {'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
 
 
-
 @login_required()
 def trainer(request, accountId, trainerId=None):
 
@@ -102,25 +101,48 @@ def trainer(request, accountId, trainerId=None):
             return redirect('trainer_view', account.id)
 
 @login_required()
-def student(request, userId):
+def student(request, accountId, studentId=None):
+
+    # If we are passed in a trainer, verify that is it a valid trainer
+    if studentId is not None:
+        student = get_object_or_404(Student, id=studentId)
+    else:
+        student = None
+
+    # Check here to validate that this user is tied to the accountId in the URI
+    # redirect to their view page if not
+    account = MyProfile.objects.get(user_id=request.user.id)
+    if int(accountId) != int(account.id):
+        return redirect('student_view', account.id)
+
     if request.method == 'GET':
-        form = StudentForm()
-        if int(request.user.id) == int(userId):
-            accountId = MyProfile.objects.get(user_id=request.user.id)
-            student = Student.objects.filter(account_id=accountId.id)
-            return render_to_response('student.html', {'student': student, 'form': form}, context_instance=RequestContext(request))
+        # Here we handle GET's.  If a trainer id is in the uri then we are doing
+        # and edit and will display this trainer instance using the edit form, otherwise
+        # display the list of trainers for this account
+        if student is not None:
+            form = StudentForm(instance=student)
+            id = studentId
+            account_id = accountId
+            return render_to_response('student_edit.html', locals(), context_instance=RequestContext(request))
         else:
-            return redirect('student_view', request.user.id)
-    elif request.method == "POST":
-        accountId = MyProfile.objects.get(user_id=request.user.id)
-        form = StudentForm(request.POST)
+            form = StudentForm()
+            student = Student.objects.filter(account_id=account.id)
+            return render_to_response('student.html', locals(), context_instance=RequestContext(request))
+    elif request.method == 'POST':
+
+        # Updating existing trainer
+        if student is not None:
+            form = StudentForm(request.POST, instance=student)
+        else:
+            # Adding new trainer
+            student = Student(account_id=account.id)
+            form = StudentForm(request.POST, instance=student)
+        
         if form.is_valid():
-            s = Student(account_id=accountId.id)
-            f = StudentForm(request.POST, instance=s)
-            f.save()
-            return redirect('student_view', request.user.id)
+            form.save()
+            return redirect('student_view', account.id)
         else:
-            return redirect('student_view', request.user.id)
+            return redirect('student_view', account.id)
 
 @login_required()
 def session(request):
@@ -183,17 +205,26 @@ def deleteTrainer(request, accountId, trainerId):
     trainer = Trainer.objects.get(account_id=account.id,id=trainerId).delete()
     return redirect('trainer_view', account.id)
 
+def deleteStudent(request, accountId, studentId):
+
+    # Check here to validate that this user is tied to the accountId in the URI
+    # redirect to their view page if not
+    account = MyProfile.objects.get(user_id=request.user.id)
+    if int(accountId) != int(account.id):
+        return redirect('student_view', account.id)
+
+    # Need to add code here that validates the following:
+    # That user making the request is associated with the accountId being passed in and
+    # that this account owns the trainer being passed in
+    student = Student.objects.get(account_id=account.id,id=studentId).delete()
+    return redirect('student_view', account.id)
+
 @login_required()
 def removeSession(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     session = Session.objects.get(account_id=accountId.id,id=userId).delete()
     return redirect('session_view')
 
-@login_required()
-def removeStudent(request, userId):
-    accountId = MyProfile.objects.get(user_id=request.user.id)
-    student = Student.objects.get(account_id=accountId.id,id=userId).delete()
-    return redirect('student_view', request.user.id)
 
 @login_required()
 def editSession(request, userId):
