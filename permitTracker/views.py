@@ -127,13 +127,8 @@ def session(request):
     if request.method == 'GET':
         form = SessionForm()
         accountId = MyProfile.objects.get(user_id=request.user.id)
-        try:
-            student = Student.objects.filter(account_id=accountId.id)
-            studentFoo = Student.objects.filter(account_id=accountId.id)[0:1].get()
-        except:
-            return render_to_response('sessionError.html',  context_instance=RequestContext(request))
-
-        session = Session.objects.filter(account_id=accountId.id,studentName=studentFoo.id).order_by('-date')
+        student = Student.objects.filter(account_id=accountId.id)
+        session = Session.objects.filter(account_id=accountId.id).order_by('-date')
         form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
         form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
         return render_to_response('session.html', {'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
@@ -192,7 +187,7 @@ def deleteTrainer(request, accountId, trainerId):
 def removeSession(request, userId):
     accountId = MyProfile.objects.get(user_id=request.user.id)
     session = Session.objects.get(account_id=accountId.id,id=userId).delete()
-    return redirect('session_view', request.user.id)
+    return redirect('session_view')
 
 @login_required()
 def removeStudent(request, userId):
