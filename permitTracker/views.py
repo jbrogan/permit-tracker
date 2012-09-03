@@ -163,51 +163,77 @@ def student(request, accountId, studentId=None):
         else:
             return redirect('student_view', account.id)
 
-@login_required()
-def session(request):
-    if request.method == 'GET':
-        form = SessionForm()
-        accountId = MyProfile.objects.get(user_id=request.user.id)
-        student = Student.objects.filter(account_id=accountId.id)
-        session = Session.objects.filter(account_id=accountId.id).order_by('-date')
-        form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
-        form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
-        return render_to_response('session.html', {'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
-    elif request.method == "POST":
-        accountId = MyProfile.objects.get(user_id=request.user.id)
-        form = SessionForm(request.POST)
-        if form.is_valid():
-            s = Session(account_id=accountId.id)
-            f = SessionForm(request.POST, instance=s)
-            f.save()
-            return redirect('session_view')
-        else:
-            return redirect('session_view')
 
-def getSession(request,userId):
+@login_required()
+def session(request, accountId, studentId=None):
+
+    # If we are passed in a trainer, verify that is it a valid trainer
+    if studentId is not None:
+        student = get_object_or_404(Student, id=studentId)
+    else:
+        student = None
+
+    # Check here to validate that this user is tied to the accountId in the URI
+    # redirect to their view page if not
+    account = MyProfile.objects.get(user_id=request.user.id)
+    if int(accountId) != int(account.id):
+        return redirect('session_view', account.id)
+
     if request.method == 'GET':
-        userId = int(userId)
-        form = SessionForm()
-        accountId = MyProfile.objects.get(user_id=request.user.id)
-        student = Student.objects.filter(account_id=accountId.id)
-        try:
-            studentFoo = Student.objects.get(account_id=accountId.id,id=userId)
-        except:
-            return render_to_response('sessionError.html', context_instance=RequestContext(request))
-        session = Session.objects.filter(account_id=accountId.id,studentName=studentFoo.id).order_by('-date')
-        form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
-        form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
-        return render_to_response('session.html', {'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
-    elif request.method == "POST":
-        accountId = MyProfile.objects.get(user_id=request.user.id)
-        form = SessionForm(request.POST)
-        if form.is_valid():
-            s = Session(account_id=accountId.id)
-            f = SessionForm(request.POST, instance=s)
-            f.save()
-            return redirect('session_view', userId)
+        # Here we handle GET's.  If a trainer id is in the uri then we are doing
+        # and edit and will display this trainer instance using the edit form, otherwise
+        # display the list of trainers for this account
+        if student is not None:
+           studentId = int(studentId)
+           form = SessionForm()
+           accountId = MyProfile.objects.get(user_id=request.user.id)
+           student = Student.objects.filter(account_id=accountId.id)
+           try:
+               studentFoo = Student.objects.get(account_id=accountId.id,id=studentId)      
+           except:
+               return render_to_response('sessionError.html', context_instance=RequestContext(request))
+        
+           session = Session.objects.filter(account_id=accountId.id,studentName=studentFoo.id).order_by('-date')
+           form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
+           form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
+        
+           return render_to_response('session.html', {'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
+ 
         else:
-            return redirect('session_view', userId)
+           form = SessionForm()
+           accountId = MyProfile.objects.get(user_id=request.user.id)
+           student = Student.objects.filter(account_id=accountId.id)
+           session = Session.objects.filter(account_id=accountId.id).order_by('-date')
+           form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
+           form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
+           
+           return render_to_response('session.html', {'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
+
+    elif request.method == 'POST':
+
+        # Updating existing trainer
+        if student is not None:
+            accountId = MyProfile.objects.get(user_id=request.user.id)
+            form = SessionForm(request.POST)
+            if form.is_valid():
+                s = Session(account_id=accountId.id)
+                f = SessionForm(request.POST, instance=s)
+                f.save()
+                return redirect('sessionGet_view', account.id, studentId)
+            else:
+                return redirect('sessionGet_view', account.id, studentId)
+
+        else:
+            accountId = MyProfile.objects.get(user_id=request.user.id)
+            form = SessionForm(request.POST)
+            if form.is_valid():
+                s = Session(account_id=accountId.id)
+                f = SessionForm(request.POST, instance=s)
+                f.save()
+                return redirect('session_view', account.id)
+            else:
+                return redirect('session_view', account.id)
+
 
 @login_required()
 def deleteTrainer(request, accountId, trainerId):
@@ -238,12 +264,21 @@ def deleteStudent(request, accountId, studentId):
     student = Student.objects.get(account_id=account.id,id=studentId).delete()
     return redirect('student_view', account.id)
 
-@login_required()
-def removeSession(request, userId):
-    accountId = MyProfile.objects.get(user_id=request.user.id)
-    session = Session.objects.get(account_id=accountId.id,id=userId).delete()
-    return redirect('session_view')
 
+@login_required()
+def deleteSession(request, accountId, sessionId):
+
+    # Check here to validate that this user is tied to the accountId in the URI
+    # redirect to their view page if not
+    account = MyProfile.objects.get(user_id=request.user.id)
+    if int(accountId) != int(account.id):
+        return redirect('session_view', account.id)
+
+    # Need to add code here that validates the following:
+    # That user making the request is associated with the accountId being passed in and
+    # that this account owns the trainer being passed in
+    session = Session.objects.get(account_id=account.id,id=sessionId).delete()
+    return redirect('session_view', account.id)
 
 @login_required()
 def editSession(request, userId):

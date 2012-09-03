@@ -2,11 +2,11 @@
 {% block content %}
 <ul class="nav nav-pills">
     <li class="active">
-    <a href="/permit/sessions/">All</a>
+    <a href="{% url session_view user.id %}">All</a>
     </li>
     {% for i in student %}
     <li>
-    <a href="/permit/sessions/{{i.id}}">{{ i.studentName }}</a>
+    <a href="{% url sessionGet_view i.account_id i.id %}">{{ i.studentName }}</a>
     </li>
     {% endfor %}
 </ul>
@@ -86,8 +86,8 @@
                       <td></td>
                       {% endif %}
 
-                      <td><a class="btn btn-danger" href="{% url session_view i.id %}remove"><i class="icon-remove icon-white"></i></a>
-                          <a class="btn btn-primary" href="{% url session_edit i.id %}"><i class="icon-edit icon-white"></i></a></td>
+                      <td><a class="btn btn-danger" href="{% url session_delete i.account_id i.id %}"><i class="icon-remove icon-white"></i></a>
+                          <a class="btn btn-primary" href="{% url session_edit i.account_id i.id %}"><i class="icon-edit icon-white"></i></a></td>
                   </tr>
             {% endfor %}
             </table>
