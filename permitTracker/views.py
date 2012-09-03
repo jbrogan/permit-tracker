@@ -18,43 +18,62 @@ from account.models import MyProfile
 def home(request):
     return render_to_response('home.html', context_instance=RequestContext(request))
 
-def summary(request):
-    accountId = MyProfile.objects.get(user_id=request.user.id)
-    try:
-        student = Student.objects.filter(account_id=accountId.id)
-        studentId = Student.objects.filter(account_id=accountId.id)[0:1].get()
-    except:
-        return render_to_response('summary.html', {'student' : student}, context_instance=RequestContext(request))
-    stateHours = Student.objects.get(account_id=accountId.id, id=studentId.id)
-    totalHours = StateRequirement.objects.get(state_id=stateHours.state_id)
-    stateTime = int(totalHours.totalTime) * 60
-    time = Session.objects.filter(account_id=accountId.id, studentName_id=studentId.id).aggregate(Sum('driveTime'))
-    if time['driveTime__sum']  == None:
-        percent = 0
-        time['driveTime__sum'] = 0
-    else:
-        percent = time['driveTime__sum'] / float(stateTime)
-        percent = int(round(percent,2) * 100)
 
-    return render_to_response('summary.html', {'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
+@login_required()
+def summary(request, accountId, studentId=None):
+
+    # If we are passed in a trainer, verify that is it a valid trainer
+    if studentId is not None:
+        student = get_object_or_404(Student, id=studentId)
+    else:
+        student = None
+
+    # Check here to validate that this user is tied to the accountId in the URI
+    # redirect to their view page if not
+    account = MyProfile.objects.get(user_id=request.user.id)
+    if int(accountId) != int(account.id):
+        return redirect('summary_view', account.id)
+
+    if request.method == 'GET':
+        # Here we handle GET's.  If a trainer id is in the uri then we are doing
+        # and edit and will display this trainer instance using the edit form, otherwise
+        # display the list of trainers for this account
+        if student is not None:
+            student = Student.objects.filter(account_id=account.id)
+            stateHours = Student.objects.get(account_id=account.id, id=studentId)
+            totalHours = StateRequirement.objects.get(state_id=stateHours.state_id)
+            stateTime = int(totalHours.totalTime) * 60
+            time = Session.objects.filter(account_id=account.id, studentName_id=studentId).aggregate(Sum('driveTime'))
+            if time['driveTime__sum']  == None:
+                percent = 0
+                time['driveTime__sum'] = 0
+            else:
+                percent = time['driveTime__sum'] / float(stateTime)
+                percent = int(round(percent,2) * 100)
+
+            return render_to_response('summaryGet.html', {'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
+
+            
+        else:
+             try:
+                student = Student.objects.filter(account_id=account.id)
+                studentId = Student.objects.filter(account_id=account.id)[0:1].get()
+             except:
+                return render_to_response('summary.html', {'student' : student}, context_instance=RequestContext(request))
+            
+             stateHours = Student.objects.get(account_id=account.id, id=studentId.id)
+             totalHours = StateRequirement.objects.get(state_id=stateHours.state_id)
+             stateTime = int(totalHours.totalTime) * 60
+             time = Session.objects.filter(account_id=account.id, studentName_id=studentId.id).aggregate(Sum('driveTime'))
+             if time['driveTime__sum']  == None:
+                 percent = 0
+                 time['driveTime__sum'] = 0
+             else:
+                 percent = time['driveTime__sum'] / float(stateTime)
+                 percent = int(round(percent,2) * 100)
+
+             return render_to_response('summary.html', {'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
  
-
-def getSummary(request, userId):
-    accountId = MyProfile.objects.get(user_id=request.user.id)
-    student = Student.objects.filter(account_id=accountId.id)
-    stateHours = Student.objects.get(account_id=accountId.id, id=userId)
-    totalHours = StateRequirement.objects.get(state_id=stateHours.state_id)
-    stateTime = int(totalHours.totalTime) * 60
-    time = Session.objects.filter(account_id=accountId.id, studentName_id=userId).aggregate(Sum('driveTime'))
-    if time['driveTime__sum']  == None:
-        percent = 0
-        time['driveTime__sum'] = 0
-    else:
-        percent = time['driveTime__sum'] / float(stateTime)
-        percent = int(round(percent,2) * 100)
-
-    return render_to_response('summaryGet.html', {'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
-
 
 @login_required()
 def trainer(request, accountId, trainerId=None):

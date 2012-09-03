@@ -3,7 +3,7 @@ from views import (
     trainer, deleteTrainer, editTrainer,
     student, deleteStudent, editStudent,
     session, removeSession, editSession,
-    summary, getSummary, getSession,
+    summary, getSession,
 )
 
 urlpatterns = patterns('',
@@ -19,6 +19,6 @@ urlpatterns = patterns('',
     url(r'(\d+)/students/(\d+)/$', student, name='student_view'),
     url(r'(\d+)/students/(\d+)/edit$', student, name='student_edit'),
     url(r'(\d+)/students/(\d+)/delete$', deleteStudent, name='student_delete'),
-    url(r'summary/$', summary, name='summary_view'),
-    url(r'summary/(\d+)/$', getSummary, name='summary_view'),
+    url(r'(\d+)/summary/$', summary, name='summary_view'),
+    url(r'(\d+)/summary/(\d+)$', summary, name='summaryGet_view'),
 )
