@@ -300,9 +300,12 @@ def editSession(request, accountId, studentId):
         # and edit and will display this trainer instance using the edit form, otherwise
         # display the list of trainers for this account
         if student is not None:
+            accountId = MyProfile.objects.get(user_id=request.user.id)
+            account_id = accountId.id
             form = SessionForm(instance=student)
             id = studentId
-            account_id = accountId
+            form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
+            form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
             return render_to_response('session_edit.html', locals(), context_instance=RequestContext(request))
         else:
             pass
@@ -310,8 +313,8 @@ def editSession(request, accountId, studentId):
 
         # Updating existing trainer
         if student is not None:
-            form = SessionForm(request.POST, instance=student)
-        
+           accountId = MyProfile.objects.get(user_id=request.user.id)
+           form = SessionForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
             return redirect('session_view', account.id)
