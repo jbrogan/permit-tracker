@@ -281,11 +281,42 @@ def deleteSession(request, accountId, sessionId):
     return redirect('session_view', account.id)
 
 @login_required()
-def editSession(request, userId):
-    accountId = MyProfile.objects.get(user_id=request.user.id)
-    session = Session.objects.get(account_id=accountId.id,id=userId)
-    form = SessionForm(instance=session)
-    return HttpResponseRedirect('#myModal')
+def editSession(request, accountId, studentId):
+
+    # If we are passed in a trainer, verify that is it a valid trainer
+    if studentId is not None:
+        student = get_object_or_404(Session, id=studentId)
+    else:
+        student = None
+
+    # Check here to validate that this user is tied to the accountId in the URI
+    # redirect to their view page if not
+    account = MyProfile.objects.get(user_id=request.user.id)
+    if int(accountId) != int(account.id):
+        return redirect('session_view', account.id)
+
+    if request.method == 'GET':
+        # Here we handle GET's.  If a trainer id is in the uri then we are doing
+        # and edit and will display this trainer instance using the edit form, otherwise
+        # display the list of trainers for this account
+        if student is not None:
+            form = SessionForm(instance=student)
+            id = studentId
+            account_id = accountId
+            return render_to_response('session_edit.html', locals(), context_instance=RequestContext(request))
+        else:
+            pass
+    elif request.method == 'POST':
+
+        # Updating existing trainer
+        if student is not None:
+            form = SessionForm(request.POST, instance=student)
+        
+        if form.is_valid():
+            form.save()
+            return redirect('session_view', account.id)
+        else:
+            return redirect('session_view', account.id)
 
 @login_required()
 def editTrainer(request, userId):
