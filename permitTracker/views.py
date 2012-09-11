@@ -197,7 +197,7 @@ def session(request, accountId, studentId=None):
            form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
            form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
         
-           return render_to_response('session.html', {'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
+           return render_to_response('session.html', {'account': account, 'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
  
         else:
            form = SessionForm()
