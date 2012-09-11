@@ -51,7 +51,7 @@ def summary(request, accountId, studentId=None):
                 percent = time['driveTime__sum'] / float(stateTime)
                 percent = int(round(percent,2) * 100)
 
-            return render_to_response('summaryGet.html', {'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
+            return render_to_response('summaryGet.html', {'account':account,'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
 
             
         else:
@@ -59,7 +59,7 @@ def summary(request, accountId, studentId=None):
                 student = Student.objects.filter(account_id=account.id)
                 studentId = Student.objects.filter(account_id=account.id)[0:1].get()
              except:
-                return render_to_response('summary.html', {'student' : student}, context_instance=RequestContext(request))
+                 return render_to_response('summary.html', {'account': account,'student' : student}, context_instance=RequestContext(request))
             
              stateHours = Student.objects.get(account_id=account.id, id=studentId.id)
              totalHours = StateRequirement.objects.get(state_id=stateHours.state_id)
@@ -72,7 +72,7 @@ def summary(request, accountId, studentId=None):
                  percent = time['driveTime__sum'] / float(stateTime)
                  percent = int(round(percent,2) * 100)
 
-             return render_to_response('summary.html', {'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
+             return render_to_response('summary.html', {'account' : account, 'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
  
 
 @login_required()
@@ -207,7 +207,7 @@ def session(request, accountId, studentId=None):
            form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
            form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
            
-           return render_to_response('session.html', {'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
+           return render_to_response('session.html',{'account': account, 'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
 
     elif request.method == 'POST':
 
