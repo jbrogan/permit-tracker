@@ -16,7 +16,8 @@ from forms import SessionForm, TrainerForm, StudentForm
 from account.models import MyProfile
 
 def home(request):
-    return render_to_response('home.html', context_instance=RequestContext(request))
+    account = MyProfile.objects.get(user_id=request.user.id)
+    return render_to_response('home.html', {'account':account}, context_instance=RequestContext(request))
 
 
 @login_required()
@@ -53,14 +54,14 @@ def summary(request, accountId, studentId=None):
 
             return render_to_response('summaryGet.html', {'account':account,'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
 
-            
+
         else:
              try:
                 student = Student.objects.filter(account_id=account.id)
                 studentId = Student.objects.filter(account_id=account.id)[0:1].get()
              except:
                  return render_to_response('summary.html', {'account': account,'student' : student}, context_instance=RequestContext(request))
-            
+
              stateHours = Student.objects.get(account_id=account.id, id=studentId.id)
              totalHours = StateRequirement.objects.get(state_id=stateHours.state_id)
              stateTime = int(totalHours.totalTime) * 60
@@ -73,7 +74,7 @@ def summary(request, accountId, studentId=None):
                  percent = int(round(percent,2) * 100)
 
              return render_to_response('summary.html', {'account' : account, 'student' : student, 'percent' : percent, 'totalTime' : totalHours.totalTime, 'completedTime' : time['driveTime__sum'] / 60}, context_instance=RequestContext(request))
- 
+
 
 @login_required()
 def trainer(request, accountId, trainerId=None):
@@ -156,7 +157,7 @@ def student(request, accountId, studentId=None):
             # Adding new trainer
             student = Student(account_id=account.id)
             form = StudentForm(request.POST, instance=student)
-        
+
         if form.is_valid():
             form.save()
             return redirect('student_view', account.id)
@@ -189,16 +190,16 @@ def session(request, accountId, studentId=None):
            accountId = MyProfile.objects.get(user_id=request.user.id)
            student = Student.objects.filter(account_id=accountId.id)
            try:
-               studentFoo = Student.objects.get(account_id=accountId.id,id=studentId)      
+               studentFoo = Student.objects.get(account_id=accountId.id,id=studentId)
            except:
                return render_to_response('sessionError.html', context_instance=RequestContext(request))
-        
+
            session = Session.objects.filter(account_id=accountId.id,studentName=studentFoo.id).order_by('-date')
            form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
            form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
-        
+
            return render_to_response('session.html', {'account': account, 'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
- 
+
         else:
            form = SessionForm()
            accountId = MyProfile.objects.get(user_id=request.user.id)
@@ -206,7 +207,7 @@ def session(request, accountId, studentId=None):
            session = Session.objects.filter(account_id=accountId.id).order_by('-date')
            form.fields['studentName'].queryset = Student.objects.filter(account_id=accountId.id)
            form.fields['trainerName'].queryset = Trainer.objects.filter(account_id=accountId.id)
-           
+
            return render_to_response('session.html',{'account': account, 'session': session, 'form': form, 'student': student}, context_instance=RequestContext(request))
 
     elif request.method == 'POST':
